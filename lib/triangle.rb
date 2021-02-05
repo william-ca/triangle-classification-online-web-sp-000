@@ -1,33 +1,26 @@
 class Triangle
 
-  attr_accessor :side1, :side2, :side3, :equilateral, :isosceles, :scalene
+  attr_accessor :sides
 
-  def initialize(side1, side2, side3)
-    @side1 = side1
-    @side2 = side2
-    @side3 = side3
-  end
+  @sides = []
 
-  def three_sides
-    if @side1 > 0 && @side2 > 0 && @side3 > 0
-      true
-    else
-      raise TriangleError
-    end
-  end
-
-  def kind
-    if three_sides == true && @side1 = @side2 && @side2 = @side3
-      @equilateral
-    elsif three_sides == true && @side1 != @side2 && @side2 != @side3
-      @scalene
-    else
-      @isosceles
-    end
+  def initialize(s1, s2, s3)
+    @sides = [s1, s2, s3]
+    @sides.sort!
   end
 
   class TriangleError < StandardError
 
   end
 
+  def kind
+    if @sides.any? { |side| side <= 0 || ((@sides[0] + @sides[1]) <= @sides[2])  }
+      raise TriangleError
+    elsif @sides.uniq.length == 1
+      :equilateral
+    elsif @sides.uniq.length == 2
+      :isosceles
+    else
+      :scalene
+    end
 end
